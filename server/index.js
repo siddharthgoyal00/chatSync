@@ -16,5 +16,5 @@ const server = app.listen(port, () => {
 });
 
 mongoose.connect(databaseUrl).then(()=> console.log("Connected to MongoDB")) 
-      
+      .catch((err)=> console.log(err));
 
