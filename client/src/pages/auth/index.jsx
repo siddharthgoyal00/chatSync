@@ -6,11 +6,21 @@ const Auth = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
+
+  const validateSignup = () =>{
+    if(!email.length){
+      toast.error("Please enter your email")
+      return false 
+    }
+    return true 
+  }
   const handleLogin = async() => {
     
   }
   const handleSignup = async() => {
-    
+    if(validateSignup()){
+      alert("all good ")
+    }
   }
   return (
     <div className="h-screen w-screen flex items-center justify-center">
