@@ -6,23 +6,26 @@ import mongoose from "mongoose";
 import authRoutes from "./routes/AuthRoutes.js";
 dotenv.config();
 const app = express();
-const port = process.env.PORT || 3001 
-const databaseUrl = process.env.DATABASE_URL
+const port = process.env.PORT || 3001;
+const databaseUrl = process.env.DATABASE_URL;
 
-app.use(cors({
+app.use(
+  cors({
     origin: [process.env.ORIGIN],
-    methods:["GET","POST","PUT","DELETE","PATCH"],
-    credentials:true
- }));
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+    credentials: true,
+  }),
+);
 
 app.use(cookieParser());
 
 app.use(express.json());
-app.use("/auth", authRoutes);
+app.use("/api/auth", authRoutes);
 const server = app.listen(port, () => {
-    console.log(`Server started on port ${port}`);
+  console.log(`Server started on port ${port}`);
 });
 
-mongoose.connect(databaseUrl).then(()=> console.log("Connected to MongoDB")) 
-      .catch((err)=> console.log(err));
-
+mongoose
+  .connect(databaseUrl)
+  .then(() => console.log("Connected to MongoDB"))
+  .catch((err) => console.log(err));

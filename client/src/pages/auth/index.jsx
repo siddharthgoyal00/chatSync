@@ -1,7 +1,11 @@
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Tabs,  TabsList} from "@/components/ui/tabs"
 import { Input } from "@/components/ui/input"
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
+import { toast } from "sonner"
+import { TabsContent, TabsTrigger } from "@radix-ui/react-tabs"
+import apiClient from "@/lib/api-client"
+import { SIGNUP_ROUTE } from "@/utils/constants"
 const Auth = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -9,19 +13,44 @@ const Auth = () => {
 
   const validateSignup = () =>{
     if(!email.length){
-      toast.error("Please enter your email")
+      toast.error("Email is required")
+      return false  
+    }
+    if(!password.length){ 
+      toast.error("password is required")
+      return false
+    }
+    if(password !== confirmPassword){
+      toast.error("Password and confirm password should be same")
       return false 
     }
     return true 
-  }
+  };
+
   const handleLogin = async() => {
     
-  }
+  };
   const handleSignup = async() => {
     if(validateSignup()){
-      alert("all good ")
-    }
+    try {
+    const response = await apiClient.post(SIGNUP_ROUTE, {
+      email,
+      password,
+      confirmPassword,
+    });
+
+    console.log(response.data);
+    toast.success("Signup successful!");
+
+  } catch (error) {
+    console.error(error);
+
+    toast.error(
+      error.response?.data?.message || "Signup failed"
+    );
+  } 
   }
+  };
   return (
     <div className="h-screen w-screen flex items-center justify-center">
       <div className="h-[80vh] bg-white border-2 border-white text-opacity-90 shadow-2xl items-center justify-center w-[80vw] md:w-[90vw] lg:w-[70vw] xl:w-[60vw] rounded-3xl    ">
