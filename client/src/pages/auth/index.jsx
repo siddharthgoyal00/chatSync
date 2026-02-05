@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import { toast } from "sonner"
 import { TabsContent, TabsTrigger } from "@radix-ui/react-tabs"
 import apiClient from "@/lib/api-client"
-import { SIGNUP_ROUTE } from "@/utils/constants"
+import { SIGNUP_ROUTE , LOGIN_ROUTE} from "@/utils/constants"
 const Auth = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -27,8 +27,39 @@ const Auth = () => {
     return true 
   };
 
+  const validateLogin = () =>{
+    if(!email.length){
+      toast.error("Email is required")
+      return false  
+    }
+    if(!password.length){ 
+      toast.error("password is required")
+      return false
+    }
+    return true 
+  };
+
   const handleLogin = async() => {
-    
+    if(validateLogin()){
+      try {
+        const response = await apiClient.post(LOGIN_ROUTE, {
+          email,
+          password,
+        },{
+          withCredentials: true,
+        });
+
+        console.log(response.data);
+        toast.success("Login successful!");
+
+      } catch (error) {
+        console.error(error);
+
+        toast.error(
+          error.response?.data?.message || "Login failed"
+        );
+      } 
+    }
   };
   const handleSignup = async() => {
     if(validateSignup()){
@@ -37,6 +68,8 @@ const Auth = () => {
       email,
       password,
       confirmPassword,
+    },{
+      withCredentials: true,
     });
 
     console.log(response.data);
